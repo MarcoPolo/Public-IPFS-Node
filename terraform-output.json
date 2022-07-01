@@ -1,0 +1,7 @@
+{
+  "ipfs-node-ip": {
+    "sensitive": false,
+    "type": "string",
+    "value": "54.218.119.118"
+  }
+}

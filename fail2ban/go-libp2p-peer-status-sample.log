@@ -1,0 +1,1 @@
+2022-06-28T15:43:47.100-0700    INFO    canonical-log   upgrader/upgrader.go:181        CANONICAL_PEER_STATUS: peer=QmZuJq46J2b6zjCc23if9Vsr9yQzhUZqDjwHzE9ehNakfS addr=/ip4/124.235.182.135/tcp/36420 sample_rate=100 connection_status=success

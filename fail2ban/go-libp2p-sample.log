@@ -1,0 +1,3 @@
+2022-06-23T16:23:33.662-0700    WARNING   canonical-log   canonicallog/canonicallog_test.go:13    CANONICAL_MISBEHAVING_PEER: peer=QmVvtzcZgCkMnSFf2dnrBPXrWuNFWNM9J3MpZQCvWPuVZf addr=/ip4/1.2.3.4 component=somecomponent err=something msg=hi
+2022-06-23T16:23:33.662-0700    WARNING   canonical-log   canonicallog/canonicallog_test.go:16    CANONICAL_MISBEHAVING_PEER: peer=QmT1VesmGjDy4LnGzqSAbkr7ntqh67cgedU2dhsMk7dVGL addr=/ip4/127.0.0.1/tcp/80 component=somecomponent err=something msg=hi
+2022-06-28T15:43:47.100-0700    INFO    canonical-log   upgrader/upgrader.go:181        CANONICAL_PEER_STATUS: peer=QmZuJq46J2bxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx addr=/ip4/14.5.2.5/tcp/36420 sample_rate=100 connection_status=success
