@@ -1,5 +1,15 @@
 # Run books
 
+## Running ipfs
+
+In a tmux (for debugging):
+
+```
+GOLOG_LOG_LEVEL="canonical-log=info" LIBP2P_RCMGR=1 ipfs init
+GOLOG_LOG_LEVEL="canonical-log=info" LIBP2P_RCMGR=1 ipfs daemon
+```
+
+
 ## How to update grafana password
 
 ```

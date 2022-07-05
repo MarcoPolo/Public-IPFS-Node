@@ -1,11 +1,11 @@
 { buildGo117Module, lib, fetchFromGitHub }:
 buildGo117Module rec {
   src = fetchFromGitHub {
-    owner = "marcopolo";
+    owner = "ipfs";
     repo = "go-ipfs";
-    rev = "marco/go-libp2p-21-rc";
-    sha256 = "sha256-zCGD7pRLRDSo4RMOwELKl8xnkuzCyG0MOSvH8c3y1SQ=";
-    # vendorSha256 = pkgs.lib.fakeSha256;    
+    rev = "rcgmr-auto-scale";
+    sha256 = "sha256-7ZfDg+b0nDi+eOWJkbN1BPpD7GAWTUs+dmUGex6sSps=";
+    # sha256 = lib.fakeSha256;
   };
 
   pname = "kubo";
@@ -14,7 +14,7 @@ buildGo117Module rec {
   checkPhase = "";
 
 
-  vendorSha256 = "sha256-5vBNSn9ovvB6N4ywZrG3dwV250Pa+zBCdlL//4ZU6ec=";
+  vendorSha256 = "sha256-Qpvug3MF9zj+4HFNi1MeotvCy8Ff6RABxk1NVdf0gSk=";
   # vendorSha256 = lib.fakeSha256;
 
   meta = with lib; {
