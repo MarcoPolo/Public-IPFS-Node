@@ -67,22 +67,70 @@
             {
               inherit system;
               modules = [
+                # Install ipfs
+                ({ config, pkgs, ... }: {
+                  # services.ipfs = {
+                  #   enable = true;
+                  #   package = self.packages.${system}.ipfs // { repoVersion = "13"; };
+                  # };
+                  environment.systemPackages = [
+                    self.packages.${system}.ipfs
+                  ];
+
+                  networking.firewall = {
+                    enable = true;
+                    allowPing = true;
+                    allowedTCPPortRanges = [{ from = 100; to = 9000; }];
+                    allowedUDPPortRanges = [{ from = 100; to = 9000; }];
+                  };
+                })
+
+                # Configure fail2ban
+                ({ config, pkgs, ... }: {
+                  environment.etc."fail2ban/filter.d/go-libp2p-peer-status.conf".source = ./fail2ban/filter.d/go-libp2p-peer-status.conf;
+                  services.fail2ban = {
+                    enable = true;
+                    jails = {
+                      # go-libp2p specific jail
+                      go-libp2p-weird-behavior-iptables = ''
+                        # Block an IP address if it fails a handshake or reconnects more than
+                        # 50 times a second over the course of 3 minutes. Since
+                        # we sample at 1% this means we block if we see more
+                        # than 90 failed handshakes over 3 minutes. (50 logs/s * 1% = 1 log every 
+                        # 2 second. for 60 * 3 seconds = 90 reqs in 3 minutes.)
+                        enabled  = true
+                        filter   = go-libp2p-peer-status
+                        action   = iptables-allports[name=go-libp2p-fail2ban]
+                        logpath  = /var/log/ipfs.log
+                        findtime = 180 # 3 minutes
+                        bantime  = 180 # 3 minute
+                        maxretry = 90
+                      '';
+
+                    };
+
+                  };
+                })
+
+                # Some niceties
                 ({ pkgs, ... }: {
                   environment.systemPackages =
                     with pkgs;
                     [ go_1_18 vim git tmux curl htop ];
                 })
+                # Config for running in an EC2 instance.
                 ({ modulesPath, ... }: {
                   imports = [ "${modulesPath}/virtualisation/amazon-image.nix" ];
                   ec2.hvm = true;
                   system.stateVersion = "22.05";
                 })
 
+                # General NixOS setup. enable flakes, users, ssh keys
                 ({ pkgs, modulesPath, ... }:
                   {
 
                     networking.hostName = "ipfsNode";
-                    networking.firewall.enable = false;
+                    # networking.firewall.enable = false;
 
                     # Enable Flakes
                     nix = {
@@ -108,8 +156,10 @@
                     };
                   })
 
+                # Obs
                 ({ config, pkgs, ... }:
                   {
+                    # For grafana obs
                     services.grafana = {
                       enable = true;
                       port = 2342;
@@ -129,6 +179,7 @@
                       };
                     };
 
+                    # for obs
                     services.prometheus = {
                       enable = true;
                       port = 9001;
@@ -162,6 +213,7 @@
 
                     };
 
+                    # Setup acme + ssl
                     security.acme.acceptTerms = true;
                     security.acme.defaults.email = "git@marcopolo.io";
 
@@ -179,17 +231,6 @@
                       recommendedProxySettings = true;
                       recommendedTlsSettings = true;
                     };
-
-                    # services.ipfs = {
-                    #   enable = true;
-                    #   package = self.packages.${system}.ipfs // { repoVersion = "13"; };
-                    # };
-                    environment.systemPackages = [
-                      self.packages.${system}.ipfs
-                    ];
-
-                    networking.firewall.allowedTCPPorts = [ 80 443 ];
-
                   })
               ];
             }

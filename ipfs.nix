@@ -4,7 +4,7 @@ buildGo117Module rec {
     owner = "ipfs";
     repo = "go-ipfs";
     rev = "rcgmr-auto-scale";
-    sha256 = "sha256-7ZfDg+b0nDi+eOWJkbN1BPpD7GAWTUs+dmUGex6sSps=";
+    sha256 = "sha256-HWu61bUyNAGzbIeOqJScH1XSAtRfXAoLe4ZWj0ykgnM=";
     # sha256 = lib.fakeSha256;
   };
 
