@@ -71,10 +71,26 @@
                 ({ config, pkgs, ... }: {
                   # services.ipfs = {
                   #   enable = true;
-                  #   package = self.packages.${system}.ipfs // { repoVersion = "13"; };
+                  #   package = self.packages.${system}.ipfs // { repoVersion = "14"; };
                   # };
+
+                  # Setup systemd ipfs
+                  systemd.services.ipfs-daemon = {
+                    description = "ipfs-daemon";
+                    wantedBy = [ "multi-user.target" ];
+                    after = [ "network.target" ];
+                    serviceConfig = {
+                      Environment = ''GOLOG_LOG_LEVEL="canonical-log=info" LIBP2P_RCMGR=1'';
+                      ExecStart = "${self.packages.${system}.ipfs}/bin/ipfs daemon";
+                      Restart = "always";
+                      RestartSec = "1min";
+                      User = "marco";
+                    };
+                  };
+
                   environment.systemPackages = [
                     self.packages.${system}.ipfs
+                    pkgs.getent
                   ];
 
                   networking.firewall = {
@@ -101,7 +117,8 @@
                         enabled  = true
                         filter   = go-libp2p-peer-status
                         action   = iptables-allports[name=go-libp2p-fail2ban]
-                        logpath  = /var/log/ipfs.log
+                        backend = systemd[journalflags=1]
+                        journalmatch = _SYSTEMD_UNIT=ipfs-daemon.service
                         findtime = 180 # 3 minutes
                         bantime  = 180 # 3 minute
                         maxretry = 90
