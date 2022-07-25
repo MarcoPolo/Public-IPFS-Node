@@ -113,14 +113,14 @@
                         # 50 times a second over the course of 3 minutes. Since
                         # we sample at 1% this means we block if we see more
                         # than 90 failed handshakes over 3 minutes. (50 logs/s * 1% = 1 log every 
-                        # 2 second. for 60 * 3 seconds = 90 reqs in 3 minutes.)
+                        # 2 seconds. for 60 * 3 seconds = 90 reqs in 3 minutes.)
                         enabled  = true
                         filter   = go-libp2p-peer-status
                         action   = iptables-allports[name=go-libp2p-fail2ban]
                         backend = systemd[journalflags=1]
                         journalmatch = _SYSTEMD_UNIT=ipfs-daemon.service
                         findtime = 180 # 3 minutes
-                        bantime  = 180 # 3 minute
+                        bantime  = 600 # 10 minutes
                         maxretry = 90
                       '';
 
