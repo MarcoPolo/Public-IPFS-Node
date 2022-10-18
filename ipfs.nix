@@ -1,10 +1,10 @@
-{ buildGo117Module, lib, fetchFromGitHub }:
-buildGo117Module rec {
+{ buildGo118Module, lib, fetchFromGitHub }:
+buildGo118Module rec {
   src = fetchFromGitHub {
     owner = "ipfs";
     repo = "go-ipfs";
-    rev = "rcgmr-auto-scale";
-    sha256 = "sha256-HWu61bUyNAGzbIeOqJScH1XSAtRfXAoLe4ZWj0ykgnM=";
+    rev = "bf8274f6e2afb28a624b75859991cb164cb367ff";
+    sha256 = "sha256-W+JhuFAts3hc+5m027fqiAOaIpQeUhhSpizBz1vFMnY=";
     # sha256 = lib.fakeSha256;
   };
 
@@ -14,7 +14,7 @@ buildGo117Module rec {
   checkPhase = "";
 
 
-  vendorSha256 = "sha256-Qpvug3MF9zj+4HFNi1MeotvCy8Ff6RABxk1NVdf0gSk=";
+  vendorSha256 = "sha256-WLACFY+mqyOA2VY0SAwvKCMsk8rrTY8u4CmnzVUIMGk=";
   # vendorSha256 = lib.fakeSha256;
 
   meta = with lib; {

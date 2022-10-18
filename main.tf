@@ -1,11 +1,11 @@
 data "aws_caller_identity" "current" {}
 
 locals {
-  prefix              = "marco"
-  account_id          = data.aws_caller_identity.current.account_id
+  prefix     = "marco"
+  account_id = data.aws_caller_identity.current.account_id
 }
 
-module "nixos_image_21_11" {
+module "nixos_image_22_05" {
   source  = "./aws_image_nixos"
   release = "22.05"
 }
@@ -91,7 +91,7 @@ resource "aws_security_group" "marco-ipfs-sg" {
 }
 
 resource "aws_instance" "ipfs-node" {
-  ami           = module.nixos_image_21_11.ami
+  ami           = module.nixos_image_22_05.ami
   instance_type = "t2.medium"
   key_name      = aws_key_pair.marco_nix_key.key_name
   root_block_device {

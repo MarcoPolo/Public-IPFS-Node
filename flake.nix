@@ -80,7 +80,7 @@
                     wantedBy = [ "multi-user.target" ];
                     after = [ "network.target" ];
                     serviceConfig = {
-                      Environment = ''GOLOG_LOG_LEVEL="canonical-log=info" LIBP2P_RCMGR=1'';
+                      Environment = ''GOLOG_LOG_LEVEL="canonical-log=info"'';
                       ExecStart = "${self.packages.${system}.ipfs}/bin/ipfs daemon";
                       Restart = "always";
                       RestartSec = "1min";
@@ -91,6 +91,7 @@
                   environment.systemPackages = [
                     self.packages.${system}.ipfs
                     pkgs.getent
+                    pkgs.tmux
                   ];
 
                   networking.firewall = {
