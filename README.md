@@ -1,5 +1,11 @@
 # Run books
 
+## Deploying
+```
+colmena apply --build-on-target
+```
+
+
 ## Running ipfs
 
 In a tmux (for debugging):
