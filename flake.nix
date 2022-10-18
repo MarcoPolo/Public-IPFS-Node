@@ -46,6 +46,7 @@
         {
           packages.hello = pkgs.hello;
           packages.ipfs = pkgs.callPackage (import ./ipfs.nix) { };
+          packages.bootstrapper = pkgs.callPackage (import ./workshop-server/bootstrapper.nix) { };
           defaultPackage = self.packages.${system}.hello;
           devShell = pkgs.mkShell {
             buildInputs = [
@@ -54,8 +55,12 @@
               pkgs.awscli
               update-terraform-output
               deploy-rs.defaultPackage.${system}
+
               # colmena.defaultPackage.${system}
               pkgs.colmena
+
+              # go-libp2p
+              pkgs.go_1_18
             ];
             FOO = terraformVersion;
           };
@@ -77,6 +82,7 @@
             overlays = [
               (final: prev: {
                 ipfs = self.packages.${"x86_64-linux"}.ipfs;
+                bootstrapper = self.packages.${"x86_64-linux"}.bootstrapper;
               })
             ];
           };

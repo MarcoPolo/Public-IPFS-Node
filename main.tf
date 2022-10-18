@@ -5,7 +5,7 @@ locals {
   account_id = data.aws_caller_identity.current.account_id
 }
 
-module "nixos_image_22_05" {
+module "nixos_image" {
   source  = "./aws_image_nixos"
   release = "22.05"
 }
@@ -78,8 +78,16 @@ resource "aws_security_group" "marco-ipfs-sg" {
       "0.0.0.0/0"
     ]
     from_port = 4001
-    to_port   = 4001
+    to_port   = 5001
     protocol  = "udp"
+  }
+  ingress {
+    cidr_blocks = [
+      "0.0.0.0/0"
+    ]
+    from_port = 7000
+    to_port   = 8000
+    protocol  = "tcp"
   }
   // Terraform removes the default rule
   egress {
@@ -91,7 +99,7 @@ resource "aws_security_group" "marco-ipfs-sg" {
 }
 
 resource "aws_instance" "ipfs-node" {
-  ami           = module.nixos_image_22_05.ami
+  ami           = module.nixos_image.ami
   instance_type = "t2.medium"
   key_name      = aws_key_pair.marco_nix_key.key_name
   root_block_device {

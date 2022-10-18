@@ -14,7 +14,20 @@
       ExecStart = "${pkgs.ipfs}/bin/ipfs daemon";
       Restart = "always";
       RestartSec = "1min";
-      User = "marco";
+      User = "ipfsRunner";
+    };
+  };
+
+  # Setup bootstrap server deamon
+  systemd.services.bootstrap-daemon = {
+    description = "bootstrap-daemon";
+    wantedBy = [ "multi-user.target" ];
+    after = [ "network.target" ];
+    serviceConfig = {
+      ExecStart = "${pkgs.bootstrapper}/bin/bootstrapper";
+      Restart = "always";
+      RestartSec = "1min";
+      User = "ipfsRunner";
     };
   };
 
@@ -89,11 +102,23 @@
     uid = 1005;
     createHome = true;
     extraGroups = [ "wheel" "ipfs" ];
+    group = "ipfsRunner";
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGJg919RUJA487kzkOQ5cwCFtGY8BGJ/Ehpjh20+JcRB marco@mukta.lan"
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIUY0mjDe29MhiPIZhtLiOi8ORRctayc1xPbfYJ6WT9e marco@dex"
     ];
   };
+
+  users.users.ipfsRunner = {
+    isSystemUser = true;
+    shell = pkgs.zsh;
+    uid = 1006;
+    createHome = false;
+    extraGroups = [ "ipfs" ];
+    group = "ipfsRunner";
+    openssh.authorizedKeys.keys = [ ];
+  };
+  users.groups.ipfsRunner = { };
 
   # Obs
   # For grafana obs
