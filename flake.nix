@@ -7,14 +7,22 @@
     inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  inputs.colmena.url = "github:zhaofengli/colmena";
+  inputs.colmena =
+    {
+      url = "github:zhaofengli/colmena";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+
 
 
   outputs = { self, nixpkgs, flake-utils, deploy-rs, colmena }:
     (flake-utils.lib.eachDefaultSystem
       (system:
         let
-          pkgs = import nixpkgs { system = system; };
+          pkgs = import nixpkgs {
+            system = system;
+          };
           terraformVersion = pkgs.runCommand "tf-version" { } ''
             mkdir $out
             ${pkgs.terraform}/bin/terraform version > $out/version
@@ -46,7 +54,8 @@
               pkgs.awscli
               update-terraform-output
               deploy-rs.defaultPackage.${system}
-              colmena.defaultPackage.${system}
+              # colmena.defaultPackage.${system}
+              pkgs.colmena
             ];
             FOO = terraformVersion;
           };
@@ -65,6 +74,11 @@
         meta = {
           nixpkgs = import nixpkgs {
             system = "x86_64-linux";
+            overlays = [
+              (final: prev: {
+                ipfs = self.packages.${"x86_64-linux"}.ipfs;
+              })
+            ];
           };
         };
 

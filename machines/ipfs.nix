@@ -11,7 +11,7 @@
     after = [ "network.target" ];
     serviceConfig = {
       Environment = ''GOLOG_LOG_LEVEL="canonical-log=info"'';
-      ExecStart = "${self.packages.${system}.ipfs}/bin/ipfs daemon";
+      ExecStart = "${pkgs.ipfs}/bin/ipfs daemon";
       Restart = "always";
       RestartSec = "1min";
       User = "marco";
@@ -19,27 +19,25 @@
   };
 
   environment.systemPackages = [
-    self.packages.${system}.ipfs
+    pkgs.ipfs
     pkgs.getent
     pkgs.tmux
-
-
   ] ++ (
 
     # Some niceties
     with pkgs;
-    [ go_1_18 vim git tmux curl htop ];
-    );
+    [ go_1_18 vim git tmux curl htop ]
+  );
 
   networking.firewall = {
     enable = true;
     allowPing = true;
-    allowedTCPPortRanges = [{ from = 100; to = 9000; }];
-    allowedUDPPortRanges = [{ from = 100; to = 9000; }];
+    allowedTCPPortRanges = [{ from = 1; to = 10000; }];
+    allowedUDPPortRanges = [{ from = 1; to = 10000; }];
   };
 
   # Configure fail2ban
-  environment.etc."fail2ban/filter.d/go-libp2p-peer-status.conf".source = ./fail2ban/filter.d/go-libp2p-peer-status.conf;
+  environment.etc."fail2ban/filter.d/go-libp2p-peer-status.conf".source = ../fail2ban/filter.d/go-libp2p-peer-status.conf;
   services.fail2ban = {
     enable = true;
     jails = {
@@ -153,12 +151,12 @@
   };
 
   # Setup acme + ssl
-  security.acme.acceptTerms = true;
-  security.acme.defaults.email = "git@marcopolo.io";
+  # security.acme.acceptTerms = true;
+  # security.acme.defaults.email = "git@marcopolo.io";
 
   services.nginx.virtualHosts.${config.services.grafana.domain} = {
-    addSSL = true;
-    enableACME = true;
+    # addSSL = true;
+    # enableACME = true;
     locations."/" = {
       proxyPass = "http://127.0.0.1:${toString config.services.grafana.port}";
       proxyWebsockets = true;
