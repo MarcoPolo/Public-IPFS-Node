@@ -11,8 +11,8 @@ colmena apply --build-on-target
 In a tmux (for debugging):
 
 ```
-GOLOG_LOG_LEVEL="canonical-log=info" LIBP2P_RCMGR=1 ipfs init
-GOLOG_LOG_LEVEL="canonical-log=info" LIBP2P_RCMGR=1 ipfs daemon
+GOLOG_LOG_LEVEL="canonical-log=info" ipfs init
+GOLOG_LOG_LEVEL="canonical-log=info" ipfs daemon
 ```
 
 
@@ -24,7 +24,7 @@ grafana-cli --homepath=/var/lib/grafana admin reset-admin-password
 
 ## ACME is failing.
 
-Is ipfs.marcopolo.io pointed at the correct spot? Update cloudlflare.
+Is ipfs.marcopolo.io pointed at the correct spot? Update cloudflare.
 
 ## Webtransport
 

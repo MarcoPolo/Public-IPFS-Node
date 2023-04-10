@@ -1,7 +1,7 @@
 {
   description = "A very basic flake";
   inputs.flake-utils.url = "github:numtide/flake-utils";
-  inputs.nixpkgs.url = "github:nixos/nixpkgs/release-22.05";
+  inputs.nixpkgs.url = "github:nixos/nixpkgs/release-22.11";
   inputs.deploy-rs = {
     url = "github:serokell/deploy-rs";
     inputs.nixpkgs.follows = "nixpkgs";
@@ -13,8 +13,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.flake-utils.follows = "flake-utils";
     };
-
-
 
   outputs = { self, nixpkgs, flake-utils, deploy-rs, colmena }:
     (flake-utils.lib.eachDefaultSystem

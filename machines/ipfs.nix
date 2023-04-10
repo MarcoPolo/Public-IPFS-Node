@@ -18,19 +18,6 @@
     };
   };
 
-  # Setup bootstrap server deamon
-  systemd.services.bootstrap-daemon = {
-    description = "bootstrap-daemon";
-    wantedBy = [ "multi-user.target" ];
-    after = [ "network.target" ];
-    serviceConfig = {
-      ExecStart = "${pkgs.bootstrapper}/bin/bootstrapper";
-      Restart = "always";
-      RestartSec = "1min";
-      User = "ipfsRunner";
-    };
-  };
-
   environment.systemPackages = [
     pkgs.ipfs
     pkgs.getent
@@ -76,9 +63,10 @@
   };
 
   # Config for running in an EC2 instance.
+  console.enable = true;
   imports = [ "${modulesPath}/virtualisation/amazon-image.nix" ];
   ec2.hvm = true;
-  system.stateVersion = "22.05";
+  system.stateVersion = "22.11";
 
   # General NixOS setup. enable flakes, users, ssh keys
 
@@ -91,7 +79,7 @@
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
-    trustedUsers = [ "root" "marco" ];
+    settings.trusted-users = [ "root" "marco" ];
   };
 
   security.sudo.wheelNeedsPassword = false;
@@ -124,20 +112,24 @@
   # For grafana obs
   services.grafana = {
     enable = true;
-    port = 2342;
-    domain = "ipfs.marcopolo.io";
-    addr = "127.0.0.1";
+    settings.server = {
+      domain = "ipfs.marcopolo.io";
+      http_port = 2342;
+      http_addr = "127.0.0.1";
+    };
     dataDir = "/var/lib/grafana";
-    auth.anonymous.enable = true;
+    settings."auth.anonymous".enabled = true;
 
     provision = {
       enable = true;
-      datasources = [{
-        name = "Prometheus";
-        type = "prometheus";
-        url = "http://localhost:9001";
-        isDefault = true;
-      }];
+      datasources = {
+        settings.datasources = [{
+          name = "Prometheus";
+          type = "prometheus";
+          url = "http://localhost:9001";
+          isDefault = true;
+        }];
+      };
     };
   };
 
@@ -179,11 +171,11 @@
   # security.acme.acceptTerms = true;
   # security.acme.defaults.email = "git@marcopolo.io";
 
-  services.nginx.virtualHosts.${config.services.grafana.domain} = {
+  services.nginx.virtualHosts.${config.services.grafana.settings.server.domain} = {
     # addSSL = true;
     # enableACME = true;
     locations."/" = {
-      proxyPass = "http://127.0.0.1:${toString config.services.grafana.port}";
+      proxyPass = "http://127.0.0.1:${toString config.services.grafana.settings.server.http_port}";
       proxyWebsockets = true;
     };
   };
