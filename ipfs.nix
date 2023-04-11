@@ -4,7 +4,7 @@ buildGo119Module rec {
     owner = "marcopolo";
     repo = "go-ipfs";
     rev = "marco/http-over-webtransport";
-    sha256 = "sha256-u/cvI29ssKToZys0UqNcuvneqZ/2Lo9Ydht4D7eeTtc=";
+    sha256 = "sha256-+gbth8XWxHByVn6upqHd4XQdHMFsVOrUXn/ZevKj7UY=";
     # sha256 = lib.fakeSha256;
   };
 
@@ -14,7 +14,7 @@ buildGo119Module rec {
   checkPhase = "";
 
 
-  vendorSha256 = "sha256-ET4yKTw2A/N0GlMB8tRfbcDkNWEeOoxArPCGdKevmsw=";
+  vendorSha256 = "sha256-GBCoufjnApmJeyrgEgI/0VPxj879UvlVsFl2pUHz/7A=";
   # vendorSha256 = lib.fakeSha256;
 
   meta = with lib; {
